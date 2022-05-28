@@ -7,11 +7,12 @@ function List({items, removeItem, editItem}) {
        <table className="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col">#id</th>
       <th scope="col">layout</th>
       <th scope="col">name</th>
       <th scope="col">capacity</th>
       <th scope="col">status</th>
+      <th scope="col">Image</th>
       <th scope="col">Edit</th>
       <th scope="col">Delete</th>
     </tr>
@@ -19,7 +20,7 @@ function List({items, removeItem, editItem}) {
   <tbody>
     
         {items.map((item)=>{
-            const {id,layout,name,capacity,status} = item
+            const {id,layout,name,capacity,status,file} = item
             return <tr key={id}>
                 <td>
                     {id}
@@ -37,6 +38,9 @@ function List({items, removeItem, editItem}) {
                 <td>
                     {status?'true':'false'}
                 </td> 
+                <td>
+                    <img src={file} alt="" style={{height:'50px',width:'50px',objectFit: 'cover'}} />
+                </td>
                 <td>
                    <FaEdit onClick={()=>editItem(id)}/>
                 </td>

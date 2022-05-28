@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useRef} from 'react'
 import { Button,Form,Row,Col} from 'react-bootstrap'
 import List from './List'
 
@@ -9,41 +9,33 @@ const [layout,setLayout] = useState('Select Layout')
 const [name,setName] = useState('')
 const [capacity,setCapacity] = useState('')
 const [status,setStatus] = useState(false)
-const [pic, setPic] = useState(null);
-const [loding,setLoding]= useState(false)
-const [localUrl,setLocalUrl] = useState(null)
+const [file,setFile]= useState()
 const [isEditing, setIsEditing] = useState(false);
 const [editID,setEditID] = useState(null);
+const inputRef = useRef(null);
 
   const handleSubmit = (e)=>{
     e.preventDefault()
-    if(!name && !capacity){
+    if(!name || !capacity || !file){
       alert('missing value')
     }
     else if(name && capacity && isEditing){
       setTable(table.map((item)=>{
         if(item.id===editID){
-          return{...item,layout:layout,name:name,capacity:capacity,status:status}
+          return{...item,layout:layout,name:name,capacity:capacity,status:status,file:file}
         
         }
         return item
       }))
-      setLayout('Select Layout')
-      setName('')
-      setCapacity('')
-      setStatus(false)
-      setEditID(null);
-      setIsEditing(false);
+      
+     clearAll()
       alert('done editing')
     } 
     else{
-    const newItem = {id:new Date().getTime().toString(),layout,name,capacity,status}
+    const newItem = {id:new Date().getTime().toString(),layout,name,capacity,status,file}
     setTable([...table,newItem])
     console.log(table);
-    setLayout('Select Layout')
-    setName('')
-    setCapacity('')
-    setStatus(false)
+    clearAll()
     }
   }
   
@@ -59,25 +51,43 @@ const [editID,setEditID] = useState(null);
     setLayout(specificItem.layout)
     setCapacity(specificItem.capacity)
     setStatus(specificItem.statuts)
-
+    setFile(specificItem.file)
   }
 
-  const onFileChange=(e)=>{
-    console.log(e.target.files[0])
-  }
+console.log(file);
+
+const resetFileInput = () => {
+  inputRef.current.value = null;
+};
+
+const handleCancel=()=>{
+clearAll()
+
+}
+const clearAll =()=>{
+  setLayout('Select Layout')
+  setName('')
+  setCapacity('')
+  setStatus(false)
+  resetFileInput()
+  setEditID(null);
+  setIsEditing(false);
+}
+
 
   return (
    <div className="container">
-     <h2>1.       
-       {isEditing?'Editing':'Create New'}
-       </h2>
+     <h6>       
+       {isEditing?'Editing':'Create Table'}
+       </h6>
+       <hr/>
      <Form>
       <Form.Group as={Row} className="mb-3">
             <Form.Label column sm="2">
               Layout:
             </Form.Label>
         <Col sm="10">
-          <Form.Select onChange={(e)=>setLayout(e.target.value)} >
+          <Form.Select onChange={(e)=>setLayout(e.target.value)} value={layout} >
             <option >Select Layout</option>
             <option value="1">One</option>
             <option value="2">Two</option>
@@ -101,7 +111,7 @@ const [editID,setEditID] = useState(null);
      Capacity:
     </Form.Label>
     <Col sm="10">
-    <Form.Control type="text" placeholder="Enter number of capacity"  onChange={(e)=>setCapacity(e.target.value)}/>
+    <Form.Control type="text" placeholder="Enter number of capacity" value={capacity} onChange={(e)=>setCapacity(e.target.value)}/>
     </Col>
   </Form.Group>
 
@@ -111,7 +121,7 @@ const [editID,setEditID] = useState(null);
       Status:
     </Form.Label>
     <Col sm="10">
-    <Form.Check type="checkbox" className='check'  onChange={(e)=>setStatus(!status)}/> 
+    <Form.Check type="checkbox" className='check' value={status}  onChange={(e)=>setStatus(!status)}/> 
     </Col>
   </Form.Group>
 
@@ -120,12 +130,13 @@ const [editID,setEditID] = useState(null);
       Image:
     </Form.Label>
     <Col sm="10">
-    <input type="file" onChange={onFileChange}/>
+    <input type="file" ref={inputRef} onChange={(e)=>setFile(URL.createObjectURL(e.target.files[0]))}/>
     </Col>
   </Form.Group>
  
 <Button type="submit" className='btn btn-primary' onClick={handleSubmit}>{isEditing?'Edit':'Create Table'}</Button>
-<Button className='btn btn-danger' onClick={()=>setIsEditing(false)}>Cancel</Button>
+{/* <Button className='btn btn-danger' onClick={()=>setIsEditing(false)}>{isEditing?'Cancel Edit':'Cancel'}</Button> */}
+<Button className='btn btn-danger' onClick={handleCancel}>{isEditing?'Cancel Edit':'Cancel'}</Button>
 </Form>
   <List items={table} removeItem={removeItem} editItem={editItem}/>
 </div>
