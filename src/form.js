@@ -138,6 +138,7 @@ const clearAll =()=>{
 {/* <Button className='btn btn-danger' onClick={()=>setIsEditing(false)}>{isEditing?'Cancel Edit':'Cancel'}</Button> */}
 <Button className='btn btn-danger' onClick={handleCancel}>{isEditing?'Cancel Edit':'Cancel'}</Button>
 </Form>
+<hr />
   <List items={table} removeItem={removeItem} editItem={editItem}/>
 </div>
   )

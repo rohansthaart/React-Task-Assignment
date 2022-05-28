@@ -19,7 +19,7 @@
 }
 
 body {
-  background: var(--mainBackground);
+  
   font-size: 1rem;
   
 }
@@ -69,7 +69,7 @@ body {
  input {
   border: none;
   border-color: transparent;
-  background: var(--mainBackground);
+
   border-radius: var(--mainBorderRadius);
   padding: 0.5rem;
  
