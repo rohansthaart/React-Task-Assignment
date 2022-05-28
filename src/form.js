@@ -54,8 +54,6 @@ const inputRef = useRef(null);
     setFile(specificItem.file)
   }
 
-console.log(file);
-
 const resetFileInput = () => {
   inputRef.current.value = null;
 };
@@ -116,21 +114,23 @@ const clearAll =()=>{
   </Form.Group>
 
 
-  <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+  <Form.Group as={Row} className="mb-3" >
     <Form.Label column sm="2">
       Status:
     </Form.Label>
     <Col sm="10">
-    <Form.Check type="checkbox" className='check' value={status}  onChange={(e)=>setStatus(!status)}/> 
+    <Form.Check type="checkbox" className='check' checked={status} onChange={(e)=>setStatus(!status)}/> 
     </Col>
   </Form.Group>
 
-  <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+  <Form.Group as={Row} className="mb-3">
     <Form.Label column sm="2">
       Image:
     </Form.Label>
     <Col sm="10">
-    <input type="file" ref={inputRef} onChange={(e)=>setFile(URL.createObjectURL(e.target.files[0]))}/>
+    <input type="file" ref={inputRef} onChange={(e)=>{
+      e.preventDefault()
+      setFile(URL.createObjectURL(e.target.files[0]))}}/>
     </Col>
   </Form.Group>
  
