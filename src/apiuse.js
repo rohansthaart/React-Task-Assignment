@@ -29,8 +29,8 @@ export default function Apiuse() {
         return <h1>loading...</h1>
     }else{
   return (
-    <section className="section  api">
-        <h1>API CALL</h1>
+    <section className="container">
+        <h1>2. API CALL</h1>
         <ul>
         {datas.map((item)=>{
             const {id,name,username,email} = item
