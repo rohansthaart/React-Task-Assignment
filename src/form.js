@@ -75,7 +75,7 @@ const clearAll =()=>{
 
   return (
    <div className="container">
-     <h6>       
+     <h6>        
        {isEditing?'Editing':'Create Table'}
        </h6>
        <hr/>
