@@ -7,23 +7,30 @@ const [layout,setLayout] = useState('')
 const [name,setName] = useState('')
 const [capacity,setCapacity] = useState('')
 const [status,setStatus] = useState(false)
-
-
+const [pic, setPic] = useState(null);
+const [loding,setLoding]= useState(false)
 
 const handleSubmit=(e)=>{
-  e.preventDefault();
-  if (layout && name && capacity){
-      const newTable = {layout,name,capacity,status}
-      setTable((table)=>{
-        return [...table,newTable]
-      })
-      setLayout('Select Layout')
-      setName('')
-      setCapacity('')
-     console.log(table);
-      
-         }
-    
+  e.preventDefault()
+  setLoding(true);
+  fetch("https://jsonplaceholder.typicode.com/posts",{
+    method:"POST",
+    headers:{
+      "Content-Type": "application/json"
+    },
+    body:JSON.stringify({
+      layout,name,capacity,status
+    }),
+  }).then((res)=>res.json())
+    .then((result)=>{
+      result.status === 200?console.log('success'): console.log('fail')
+      setLoding(false)
+    })
+    .catch((err)=>{
+      console.log(err);
+      setLoding(false)
+    })
+
   };
   
   
@@ -32,27 +39,28 @@ const handleSubmit=(e)=>{
     <section>
       <form className='search-form'> 
         <label htmlFor='layout'>Layout : </label>  
-        <select  value={layout} onChange={(e)=>setLayout(e.target.value)}> 
+        <select   onChange={(e)=>setLayout(e.target.value)}> 
           <option value="Select Layout" >Select Layout</option>
           <option value="2X2" >2X2</option>
           <option value ="3X3">3X3</option>
         </select><br/><br/>
 
         <label >Name: </label>
-        <input type="text" placeholder='Enter Name' value={name}  onChange={(e)=>setName(e.target.value)}/><br/><br/>
+        <input type="text" placeholder='Enter Name'  onChange={(e)=>setName(e.target.value)}/><br/><br/>
 
         <label >Capacity: </label>
         <input type="text" placeholder='Enter number of capacity' onChange={(e)=>setCapacity(e.target.value)}/><br/><br/>
 
         <label >status: </label>
-        <input type="checkbox"  value="status"  onChange={(e)=>{
-          if(status){
-            setStatus(e.target.value)
-          }else{
-            setStatus(e.target.value)
-          }
-          
-        }}></input><br/><br/>
+        <input type="checkbox"   onChange={(e)=>setStatus(!status)}/>
+         
+        {/* <input type="file"  
+           onChange={(e) => {
+            setPic(e.target.files[0]);
+
+            setLocalUrl(URL.createObjectURL(e.target.files[0]));
+          }}
+        /> */}
 
         
         <input type="submit" value="Create Table" className='btn btn-primary' onClick={handleSubmit}/>
@@ -67,12 +75,3 @@ const handleSubmit=(e)=>{
 }
 
 export default Form
-// const [selectedFile,setSelectedFile] = useState(null)
-
-// const fileSelectedHandler=(event)=>{
-//     const files = e.target.files
-//     const data = new FormData()
-//     data.append('file',files[0])
-//     data.append('upload_preset', 'darwin')
-//     setSelectedFile(event.target.file[0])
-// }
